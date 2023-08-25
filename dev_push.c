@@ -1,48 +1,37 @@
 #include "monty.h"
 /**
- * dev_queue - prints the top
+ * dev_push - add node to the stack
  * @head: stack head
  * @cnter: line_number
  * Return: no return
 */
-void dev_queue(stack_t **head, unsigned int cnter)
+void dev_push(stack_t **head, unsigned int cnter)
 {
-	(void)head;
-	(void)cnter;
-	bus.lifi = 1;
-}
+	int numx, numy = 0, flg = 0;
 
-/**
- * dev_addQ - add node to the tail stack
- * @n: new_value
- * @head: head of the stack
- * Return: no return
-*/
-void dev_addQ(stack_t **head, int n)
-{
-	stack_t *nw_nd, *auxil;
-
-	auxil = *head;
-	nw_nd = malloc(sizeof(stack_t));
-	if (nw_nd == NULL)
+	if (bus.arg)
 	{
-		printf("Error\n");
-	}
-	nw_nd->n = n;
-	nw_nd->next = NULL;
-	if (auxil)
-	{
-		while (auxil->next)
-			auxil = auxil->next;
-	}
-	if (!auxil)
-	{
-		*head = nw_nd;
-		nw_nd->prev = NULL;
-	}
+		if (bus.arg[0] == '-')
+			numy++;
+		for (; bus.arg[numy] != '\0'; numy++)
+		{
+			if (bus.arg[numy] > 57 || bus.arg[numy] < 48)
+				flg = 1; }
+		if (flg == 1)
+		{ fprintf(stderr, "L%d: usage: push integer\n", cnter);
+			fclose(bus.file);
+			free(bus.content);
+			dev_fr_stck(*head);
+			exit(EXIT_FAILURE); }}
 	else
-	{
-		auxil->next = nw_nd;
-		nw_nd->prev = auxil;
-	}
+	{ fprintf(stderr, "L%d: usage: push integer\n", cnter);
+		fclose(bus.file);
+		free(bus.content);
+		dev_fr_stck(*head);
+		exit(EXIT_FAILURE); }
+	numx = atoi(bus.arg);
+	if (bus.lifi == 0)
+		dev_addnd(head, numx);
+	else
+		dev_addQ(head, numx);
 }
